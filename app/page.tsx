@@ -233,7 +233,14 @@ export default function CafePage() {
             <h3 className="font-display text-5xl md:text-7xl tracking-tighter font-bold">Our Canvas.</h3>
           </div>
 
-          <div className="flex md:flex-wrap flex-nowrap gap-2 overflow-x-auto pb-4 md:pb-2 scrollbar-hide">
+          <div 
+            className="flex md:flex-wrap flex-nowrap gap-2 overflow-x-auto pb-4 md:pb-2 scrollbar-hide"
+            onWheel={(e) => {
+              if (e.deltaY !== 0) {
+                e.currentTarget.scrollLeft += e.deltaY;
+              }
+            }}
+          >
             {CATEGORIES.map(cat => (
               <button
                 key={cat}

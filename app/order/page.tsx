@@ -208,7 +208,14 @@ export default function OrderPage() {
             </p>
           </div>
 
-          <div className="flex md:flex-wrap flex-nowrap gap-2 mt-12 overflow-x-auto pb-4 scrollbar-hide">
+          <div 
+            className="flex md:flex-wrap flex-nowrap gap-2 mt-12 overflow-x-auto pb-4 scrollbar-hide"
+            onWheel={(e) => {
+              if (e.deltaY !== 0) {
+                e.currentTarget.scrollLeft += e.deltaY;
+              }
+            }}
+          >
             {CATEGORIES.map(cat => (
               <button
                 key={cat}
