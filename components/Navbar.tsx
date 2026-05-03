@@ -13,6 +13,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const pathname = usePathname();
   const { cartItems, isCartOpen, setIsCartOpen, removeFromCart } = useAppContext();
   const { theme, setTheme, resolvedTheme } = useTheme();
@@ -20,13 +21,16 @@ export default function Navbar() {
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   useEffect(() => {
+    setIsDesktop(window.innerWidth >= 1280);
     setTimeout(() => setMounted(true), 0);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
     const handleResize = () => {
-      // Hide the mobile cart drawer when the screen size changes
-      if (window.innerWidth < 1280) {
+      const desktop = window.innerWidth >= 1280;
+      setIsDesktop(desktop);
+      // Hide the mobile cart drawer when the screen size changes to mobile
+      if (!desktop) {
         setIsCartOpen(false);
       }
     };
@@ -138,8 +142,8 @@ export default function Navbar() {
         <motion.div 
           initial={false}
           animate={{ 
-            x: mounted ? (window.innerWidth >= 1280 ? 0 : (isCartOpen ? 0 : '100%')) : '100%',
-            filter: isCartOpen || (mounted && window.innerWidth >= 1280) ? 'blur(0px)' : 'blur(8px)'
+            x: mounted ? (isDesktop ? 0 : (isCartOpen ? 0 : '100%')) : '100%',
+            filter: isCartOpen || (mounted && isDesktop) ? 'blur(0px)' : 'blur(8px)'
           }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           className="absolute top-0 right-0 bottom-0 xl:top-24 xl:bottom-6 xl:right-6 w-full max-w-sm bg-[#fcfaf9] dark:bg-[#0f0f0f] text-[#000000] dark:text-[#fcfaf9] z-[70] shadow-2xl flex flex-col border-l xl:border border-[#000000]/10 dark:border-[#fcfaf9]/10 xl:rounded-3xl pointer-events-auto overflow-hidden"
