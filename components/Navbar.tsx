@@ -128,11 +128,11 @@ export default function Navbar() {
         <motion.div 
           initial={false}
           animate={{ 
-            x: mounted ? (window.innerWidth >= 1280 ? 0 : (isCartOpen ? 0 : '-100%')) : '-100%',
+            x: mounted ? (window.innerWidth >= 1280 ? 0 : (isCartOpen ? 0 : '100%')) : '100%',
             filter: isCartOpen || (mounted && window.innerWidth >= 1280) ? 'blur(0px)' : 'blur(8px)'
           }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="absolute top-0 left-0 bottom-0 xl:left-auto xl:right-6 xl:top-24 xl:bottom-6 w-full max-w-sm bg-[#fcfaf9] dark:bg-[#0f0f0f] text-[#000000] dark:text-[#fcfaf9] z-[70] shadow-2xl flex flex-col border-r xl:border-l-0 xl:border border-[#000000]/10 dark:border-[#fcfaf9]/10 xl:rounded-3xl pointer-events-auto overflow-hidden"
+          className="absolute top-0 right-0 bottom-0 xl:top-24 xl:bottom-6 xl:right-6 w-full max-w-sm bg-[#fcfaf9] dark:bg-[#0f0f0f] text-[#000000] dark:text-[#fcfaf9] z-[70] shadow-2xl flex flex-col border-l xl:border border-[#000000]/10 dark:border-[#fcfaf9]/10 xl:rounded-3xl pointer-events-auto overflow-hidden"
         >
           <div className="flex items-center justify-between p-6 border-b border-[#000000]/10 dark:border-[#fcfaf9]/10">
             <h2 className="font-display text-2xl font-bold">Your Order</h2>
