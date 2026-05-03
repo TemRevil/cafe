@@ -24,10 +24,20 @@ export default function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+    const handleResize = () => {
+      // Hide the mobile cart drawer when the screen size changes
+      if (window.innerWidth < 1280) {
+        setIsCartOpen(false);
+      }
+    };
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [setIsCartOpen]);
 
   const isHome = pathname === '/';
 
