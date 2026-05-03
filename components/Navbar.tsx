@@ -43,7 +43,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 xl:right-[416px] z-50 px-6 md:px-12 flex justify-between items-center transition-all duration-300 ${
+      <nav className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-12 flex justify-between items-center transition-all duration-300 ${
         isScrolled 
           ? isHome 
             ? 'bg-[#000000]/60 dark:bg-[#000000]/80 backdrop-blur-md text-[#fcfaf9] py-4 shadow-sm' 

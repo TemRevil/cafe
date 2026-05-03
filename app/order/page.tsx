@@ -184,7 +184,7 @@ export default function OrderPage() {
   );
 
   return (
-    <div className="relative min-h-screen bg-[#fcfaf9] dark:bg-[#000000] selection:bg-[#4d8b31] selection:text-[#fcfaf9] overflow-x-hidden transition-colors duration-300">
+    <div className="relative min-h-screen bg-[#fcfaf9] dark:bg-[#000000] selection:bg-[#4d8b31] selection:text-[#fcfaf9] overflow-x-hidden transition-colors duration-300 xl:pr-[416px]">
 
       <main className="pt-32 pb-24 px-4 sm:px-6 max-w-[1600px] mx-auto min-h-screen flex flex-col">
         <header className="mb-16">
