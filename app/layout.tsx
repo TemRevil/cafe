@@ -20,7 +20,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AppProvider>
             <Navbar />
-            <div className="xl:pr-[384px] transition-all duration-300">
+            <div className="xl:pr-[416px] transition-all duration-300">
               {children}
             </div>
           </AppProvider>
