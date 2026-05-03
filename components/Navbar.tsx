@@ -44,6 +44,15 @@ export default function Navbar() {
   }, [setIsCartOpen]);
 
   const isHome = pathname === '/';
+  const isOrderPage = pathname === '/order';
+
+  const handleCartClick = () => {
+    if (isOrderPage) {
+      setIsCartOpen(true);
+    } else {
+      window.location.href = '/cafe/order'; // Navigate to order page
+    }
+  };
 
   return (
     <>
@@ -79,7 +88,7 @@ export default function Navbar() {
                 {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
               </button>
             )}
-            <button onClick={() => setIsCartOpen(true)} className="flex items-center gap-2 hover:text-[#4d8b31] transition-colors relative">
+            <button onClick={handleCartClick} className="flex items-center gap-2 hover:text-[#4d8b31] transition-colors relative">
               <ShoppingBag size={18} />
               {cartCount > 0 && <span className="absolute -top-2 -left-2 bg-[#4d8b31] text-[#fcfaf9] text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">{cartCount}</span>}
               <span>({cartCount})</span>
@@ -97,7 +106,7 @@ export default function Navbar() {
               {resolvedTheme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
           )}
-          <button onClick={() => setIsCartOpen(true)} className="flex items-center gap-2 hover:text-[#4d8b31] transition-colors relative">
+          <button onClick={handleCartClick} className="flex items-center gap-2 hover:text-[#4d8b31] transition-colors relative">
             <ShoppingBag size={20} />
             {cartCount > 0 && <span className="absolute -top-2 -right-2 bg-[#4d8b31] text-[#fcfaf9] text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">{cartCount}</span>}
           </button>
@@ -125,62 +134,64 @@ export default function Navbar() {
         )}
       </AnimatePresence>
       
-      {/* Cart Sidebar (Persistent on Desktop, Drawer on Mobile) */}
-      <div className="fixed inset-0 pointer-events-none z-[60]">
-        <AnimatePresence>
-          {isCartOpen && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsCartOpen(false)}
-              className="absolute inset-0 bg-[#000000]/20 backdrop-blur-sm pointer-events-auto xl:hidden"
-            />
-          )}
-        </AnimatePresence>
-
-        <motion.div 
-          initial={false}
-          animate={{ 
-            x: mounted ? (isDesktop ? 0 : (isCartOpen ? 0 : '100%')) : '100%',
-            filter: isCartOpen || (mounted && isDesktop) ? 'blur(0px)' : 'blur(8px)'
-          }}
-          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="absolute top-0 right-0 bottom-0 xl:top-24 xl:bottom-6 xl:right-6 w-full max-w-sm bg-[#fcfaf9] dark:bg-[#0f0f0f] text-[#000000] dark:text-[#fcfaf9] z-[70] shadow-2xl flex flex-col border-l xl:border border-[#000000]/10 dark:border-[#fcfaf9]/10 xl:rounded-3xl pointer-events-auto overflow-hidden"
-        >
-          <div className="flex items-center justify-between p-6 border-b border-[#000000]/10 dark:border-[#fcfaf9]/10">
-            <h2 className="font-display text-2xl font-bold">Your Order</h2>
-            <button onClick={() => setIsCartOpen(false)} className="hover:text-[#4d8b31] transition-colors xl:hidden"><X size={24} /></button>
-          </div>
-          
-          <div className="flex-grow overflow-y-auto p-6 space-y-6">
-            {cartItems.length === 0 ? (
-              <p className="text-[#000000]/50 dark:text-[#fcfaf9]/50 font-mono text-sm tracking-widest uppercase text-center mt-10">Cart is empty</p>
-            ) : (
-              cartItems.map((item) => (
-                <div key={item.product.id} className="flex gap-4">
-                  <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-[#f3d3bd]/30 shrink-0">
-                    <Image src={item.product.image} alt={item.product.name} fill className="object-cover" referrerPolicy="no-referrer" />
-                  </div>
-                  <div className="flex-grow">
-                    <h3 className="font-display font-medium text-lg leading-tight mb-1">{item.product.name}</h3>
-                    <p className="text-[#000000]/50 dark:text-[#fcfaf9]/50 text-sm mb-2">{item.product.price} x {item.quantity}</p>
-                  </div>
-                  <button onClick={() => removeFromCart(item.product.id)} className="text-[#000000]/40 dark:text-[#fcfaf9]/40 hover:text-red-500 transition-colors self-start p-1">
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              ))
+      {/* Cart Sidebar (Persistent on Desktop, Drawer on Mobile) - Only on Order Page */}
+      {isOrderPage && (
+        <div className="fixed inset-0 pointer-events-none z-[60]">
+          <AnimatePresence>
+            {isCartOpen && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsCartOpen(false)}
+                className="absolute inset-0 bg-[#000000]/20 backdrop-blur-sm pointer-events-auto xl:hidden"
+              />
             )}
-          </div>
+          </AnimatePresence>
 
-          <div className="p-6 border-t border-[#000000]/10 dark:border-[#fcfaf9]/10 bg-[#fcfaf9] dark:bg-[#0f0f0f]">
-            <button className="w-full bg-[#000000] dark:bg-[#fcfaf9] text-[#fcfaf9] dark:text-[#000000] hover:bg-[#4d8b31] dark:hover:bg-[#4d8b31] dark:hover:text-[#fcfaf9] transition-colors py-4 rounded-full font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" disabled={cartItems.length === 0}>
-              Checkout
-            </button>
-          </div>
-        </motion.div>
-      </div>
+          <motion.div 
+            initial={false}
+            animate={{ 
+              x: mounted ? (isDesktop ? 0 : (isCartOpen ? 0 : '100%')) : '100%',
+              filter: isCartOpen || (mounted && isDesktop) ? 'blur(0px)' : 'blur(8px)'
+            }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="absolute top-0 right-0 bottom-0 xl:top-24 xl:bottom-6 xl:right-6 w-full max-w-sm bg-[#fcfaf9] dark:bg-[#0f0f0f] text-[#000000] dark:text-[#fcfaf9] z-[70] shadow-2xl flex flex-col border-l xl:border border-[#000000]/10 dark:border-[#fcfaf9]/10 xl:rounded-3xl pointer-events-auto overflow-hidden"
+          >
+            <div className="flex items-center justify-between p-6 border-b border-[#000000]/10 dark:border-[#fcfaf9]/10">
+              <h2 className="font-display text-2xl font-bold">Your Order</h2>
+              <button onClick={() => setIsCartOpen(false)} className="hover:text-[#4d8b31] transition-colors xl:hidden"><X size={24} /></button>
+            </div>
+            
+            <div className="flex-grow overflow-y-auto p-6 space-y-6">
+              {cartItems.length === 0 ? (
+                <p className="text-[#000000]/50 dark:text-[#fcfaf9]/50 font-mono text-sm tracking-widest uppercase text-center mt-10">Cart is empty</p>
+              ) : (
+                cartItems.map((item) => (
+                  <div key={item.product.id} className="flex gap-4">
+                    <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-[#f3d3bd]/30 shrink-0">
+                      <Image src={item.product.image} alt={item.product.name} fill className="object-cover" referrerPolicy="no-referrer" />
+                    </div>
+                    <div className="flex-grow">
+                      <h3 className="font-display font-medium text-lg leading-tight mb-1">{item.product.name}</h3>
+                      <p className="text-[#000000]/50 dark:text-[#fcfaf9]/50 text-sm mb-2">{item.product.price} x {item.quantity}</p>
+                    </div>
+                    <button onClick={() => removeFromCart(item.product.id)} className="text-[#000000]/40 dark:text-[#fcfaf9]/40 hover:text-red-500 transition-colors self-start p-1">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="p-6 border-t border-[#000000]/10 dark:border-[#fcfaf9]/10 bg-[#fcfaf9] dark:bg-[#0f0f0f]">
+              <button className="w-full bg-[#000000] dark:bg-[#fcfaf9] text-[#fcfaf9] dark:text-[#000000] hover:bg-[#4d8b31] dark:hover:bg-[#4d8b31] dark:hover:text-[#fcfaf9] transition-colors py-4 rounded-full font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" disabled={cartItems.length === 0}>
+                Checkout
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </>
   );
 }
